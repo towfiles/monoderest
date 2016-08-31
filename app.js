@@ -1,17 +1,33 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
+var express       = require('express');
+var path          = require('path');
+var logger        = require('morgan');
+var cookieParser  = require('cookie-parser');
 var bodyParser    = require('body-parser');
 var mongodb       = require('mongodb');
-var mongoskin = require('mongoskin');
+var mongoskin     = require('mongoskin');
 var OId = require('mongoskin').ObjectId;
-var db            = mongoskin.db("mongodb://localhost:27017/mongoapi", {native_parser:true});
+var config        = require('./config.json');
 
-var api = require('./routes/api');
+
+
+if (config && config.database) {
+  dbHostName    = config.database.default.host;
+  dbPortNumber  = config.database.default.port;
+  dbName        = config.database.default.name;
+} else {
+  dbHostName    = 'localhost';
+  dbPortNumber  = 27017;
+  dbName        = 'mongoapi';
+}
+var db              = mongoskin.db('mongodb://'+dbHostName+':'+dbPortNumber+'/'+dbName, {native_parser:true});
+
+var api             = require('./routes/api');
 
 var app = express();
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
 
 // uncomment after placing your favicon in /public
@@ -67,4 +83,3 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
-
