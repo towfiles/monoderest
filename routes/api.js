@@ -21,12 +21,18 @@ router.get('/*', function(req, res, next) {
                 res.status(err.status).json({message: err.msg});
             }
             else {
-                var processedQuery = func.queryProcessor(parameters);
-                db.collection(processedQuery.document)
-                    .find(processedQuery.filter,processedQuery.column)
-                    .toArray(function(e,docs){
-                    res.status(200).json(docs);
-                })
+                if(func.IsJsonString(parameters.filter)) { //check for properly formatted json first
+                    var processedQuery = func.queryProcessor(parameters);
+                    db.collection(processedQuery.document)
+                        .find(processedQuery.filter, processedQuery.column)
+                        .toArray(function (e, docs) {
+                            res.status(200).json(docs);
+                        })
+                }
+                else {
+                    res.status(500).json({message: "query string not properly formatted"});
+                }
+
             }
 
 
@@ -156,7 +162,6 @@ router.delete("/*", function(req, res, next){
 
 
 
-router.pos
 
 module.exports = router;
 

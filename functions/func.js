@@ -110,7 +110,22 @@ var func = {
         console.log(newfilter);
         newfilter = JSON.parse(newfilter);
         return newfilter;
+    },
+
+
+
+    IsJsonString :function (str) {
+        console.log(str);
+        try {
+            JSON.parse(str);
+        } 
+        catch (e) {
+            return false;
+        }
+        return true;
     }
+                        
+                    
 
 
 
