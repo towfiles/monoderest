@@ -7,17 +7,23 @@ var func = {
         var msg = "";
         var status;
         var err = {};
-        if (errCode == 1) {
-            msg = "incorrect parameter syntax";
-            status = 500;
-        }
-        else if (errCode == 2) {
-            msg = field + " query field not specified";
-            status = 500;
-        }
-        else if (errCode == 3) {
-            msg = field;
-            status = 500;
+        switch(errCode) {
+            case 1: 
+                msg = "Incorrect parameter syntax";
+                status = 500;
+                break;
+            case 2:
+                msg = field + " query field not specified";
+                status = 500;
+                break;
+            case 3:
+                msg = field;
+                status = 500;
+                break;
+            default:
+                msg = "Unknown error occured, please try again";
+                status = 500;
+                break;
         }
 
         err.msg    = msg;
