@@ -5,8 +5,7 @@ var cookieParser  = require('cookie-parser');
 var bodyParser    = require('body-parser');
 var mongodb       = require('mongodb');
 var mongoskin     = require('mongoskin');
-var OId = require('mongoskin').ObjectId;
-var config        = require('./config.json');
+var config        = "";
 
 
 
