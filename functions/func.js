@@ -43,9 +43,9 @@ var func = {
 
     queryValidator : function(query,req){
         //validate all compusulsory queries
-        if(this.isObjEmptyOrNotExist(query.document)){
+        if(this.isObjEmptyOrNotExist(query.collections)){
 
-            return this.functionHandler(2, "document");
+            return this.functionHandler(2, "collections");
         }
         else if(this.isObjEmptyOrNotExist(query.column) && req.method == "GET"){
 
@@ -70,7 +70,7 @@ var func = {
     queryProcessor : function(query){
 
         var processedQuery = {};
-        processedQuery.document = query.document;
+        processedQuery.collections = query.collections;
         if(query.column == "*"){
             processedQuery.column = {};
         }
