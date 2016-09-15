@@ -21,17 +21,13 @@ router.get('/*', function(req, res, next) {
                 res.status(err.status).json({message: err.msg});
             }
             else {
-                if(func.IsJsonString(parameters.filter)) { //check for properly formatted json first
-                    var processedQuery = func.queryProcessor(parameters);
-                    db.collection(processedQuery.document)
-                        .find(processedQuery.filter, processedQuery.column)
-                        .toArray(function (e, docs) {
-                            res.status(200).json(docs);
-                        })
-                }
-                else {
-                    res.status(500).json({message: "query string not properly formatted"});
-                }
+                var processedQuery = func.queryProcessor(parameters);
+                db.collection(processedQuery.collections)
+                    .find(processedQuery.filter, processedQuery.column)
+                    .toArray(function (e, docs) {
+                        res.status(200).json(docs);
+                    })
+               
 
             }
 
@@ -59,7 +55,7 @@ router.post("/*", function(req, res, next){
         }
         else {
             var insertData = req.body;
-            db.collection(parameters.document).insert(insertData, function(e, docs){
+            db.collection(parameters.collections).insert(insertData, function(e, docs){
                 if(e === null){
                     res.status(200).json(docs.insertedIds);
 
@@ -100,7 +96,7 @@ router.put("/*", function(req, res, next){
             if(!func.isObjEmptyOrNotExist(req.body.whereData)){
                 var whereData  = req.body.whereData;
                 var updateData = req.body.updateData;
-                db.collection(parameters.document).update(whereData,{$set : updateData},
+                db.collection(parameters.collections).update(whereData,{$set : updateData},
                     function(e,docs) {
                         console.log(e);
                         console.log(docs);

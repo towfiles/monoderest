@@ -1,2 +1,12 @@
-add config.json file
-where you can store port and database details
+validation of correct json syntax in all cases
+
+a route that list all the tables/collections in the database
+
+
+authentication routine
+
+
+creation of sort
+
+selection of first and limit record(pagination)
+

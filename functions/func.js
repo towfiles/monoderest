@@ -7,17 +7,23 @@ var func = {
         var msg = "";
         var status;
         var err = {};
-        if (errCode == 1) {
-            msg = "incorrect parameter syntax";
-            status = 500;
-        }
-        else if (errCode == 2) {
-            msg = field + " query field not specified";
-            status = 500;
-        }
-        else if (errCode == 3) {
-            msg = field;
-            status = 500;
+        switch(errCode) {
+            case 1: 
+                msg = "Incorrect parameter syntax";
+                status = 500;
+                break;
+            case 2:
+                msg = field + " query field not specified";
+                status = 500;
+                break;
+            case 3:
+                msg = field;
+                status = 500;
+                break;
+            default:
+                msg = "Unknown error occured, please try again";
+                status = 500;
+                break;
         }
 
         err.msg    = msg;
@@ -37,9 +43,9 @@ var func = {
 
     queryValidator : function(query,req){
         //validate all compusulsory queries
-        if(this.isObjEmptyOrNotExist(query.document)){
+        if(this.isObjEmptyOrNotExist(query.collections)){
 
-            return this.functionHandler(2, "document");
+            return this.functionHandler(2, "collections");
         }
         else if(this.isObjEmptyOrNotExist(query.column) && req.method == "GET"){
 
@@ -64,7 +70,7 @@ var func = {
     queryProcessor : function(query){
 
         var processedQuery = {};
-        processedQuery.document = query.document;
+        processedQuery.collections = query.collections;
         if(query.column == "*"){
             processedQuery.column = {};
         }
