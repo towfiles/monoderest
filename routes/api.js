@@ -42,7 +42,6 @@ router.get('/*', function(req, res, next) {
 });
 
 
-
 router.post("/*", function(req, res, next){
     db = req.db;
     parameters = req.query;
@@ -55,16 +54,24 @@ router.post("/*", function(req, res, next){
         }
         else {
             var insertData = req.body;
-            db.collection(parameters.collections).insert(insertData, function(e, docs){
-                if(e === null){
-                    res.status(200).json(docs.insertedIds);
+            var schemaValid = func.compareSchema(insertData,parameters.collections);
+            console.log(typeof schemaValid);
+            if(typeof schemaValid == "boolean"){
+                db.collection(parameters.collections).insert(insertData, function(e, docs){
+                 if(e === null){
+                 res.status(200).json(docs.insertedIds);
 
-                }
-                else {
-                    res.status(500).json({"code" : e.code, "message": e.errmsg});
-                }
+                 }
+                 else {
+                 res.status(500).json({"code" : e.code, "message": e.errmsg});
+                 }
 
-            });
+                 });
+            }
+            else {
+                res.status(500).json({message: schemaValid});
+            }
+
         }
 
 

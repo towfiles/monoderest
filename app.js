@@ -18,7 +18,7 @@ if (config && config.database) {
   dbPortNumber  = 27017;
   dbName        = 'mongoapi';
 }
-var db              = mongoskin.db('mongodb://'+dbHostName+':'+dbPortNumber+'/'+dbName, {native_parser:true});
+var db              = mongoskin.db('mongodb://'+dbHostName+':'+dbPortNumber, {native_parser:true});
 
 var api             = require('./routes/api');
 
@@ -38,6 +38,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(req, res, next){
+  console.log(db);
   req.db = db;
   next();
 });
