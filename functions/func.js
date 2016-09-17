@@ -143,7 +143,7 @@ var func = {
             console.log(schemaColumns);
             for(det2 in data){
                 if(schemaColumns.indexOf(det2) === -1){
-                    return "column" + det2 + "does not exist";
+                    return "column " + det2 + " does not exist";
                 }
             }
             return true;

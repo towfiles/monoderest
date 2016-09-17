@@ -8,7 +8,6 @@ var mongoskin     = require('mongoskin');
 var config        = require('./config.json');
 
 
-
 if (config && config.database) {
   dbHostName    = config.database.default.host;
   dbPortNumber  = config.database.default.port;
@@ -18,7 +17,7 @@ if (config && config.database) {
   dbPortNumber  = 27017;
   dbName        = 'mongoapi';
 }
-var db              = mongoskin.db('mongodb://'+dbHostName+':'+dbPortNumber, {native_parser:true});
+var db              = mongoskin.db('mongodb://'+dbHostName+':'+dbPortNumber+'/'+dbName, {native_parser:true});
 
 var api             = require('./routes/api');
 
@@ -37,12 +36,34 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function(req, res, next){
-  console.log(db);
-  req.db = db;
-  next();
-});
 
+app.use(function(req, res, next){
+  var dbexist = false;
+  db.admin().listDatabases(function(err, dbs){
+    if(err == null){
+      for(var i=0; i<dbs.databases.length; i++){
+        if(dbs.databases[i].name === dbName){
+          dbexist = true;
+          break;
+        }
+
+      }
+    }
+
+    req.db = db;
+
+    if(err){
+      next(err);
+    }
+    else if(dbexist === false){
+      res.status(500).json({message: "database does not exist"});
+    }
+    else {
+      next();
+    }
+
+  });
+});
 
 app.use('/api/*', api);
 

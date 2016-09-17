@@ -11,6 +11,7 @@ var db;
 /* rest get api crud*/
 router.get('/*', function(req, res, next) {
     db = req.db;
+    console.log(db);
     parameters = req.query;
     //validation
     if(!func.isObjEmptyOrNotExist(parameters)){
