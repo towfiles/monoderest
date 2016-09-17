@@ -129,6 +129,30 @@ var func = {
             return false;
         }
         return true;
+    },
+    
+    
+    compareSchema : function (data,collection) {
+        var schema  = require('../schema.json');
+        var schemaColumns = [];
+        if(schema[collection]){
+            schema[collection]._id = "object";
+            for(det in schema[collection]){
+                schemaColumns.push(det);
+            }
+            console.log(schemaColumns);
+            for(det2 in data){
+                if(schemaColumns.indexOf(det2) === -1){
+                    return "column " + det2 + " does not exist";
+                }
+            }
+            return true;
+        }
+        else {
+            return "collection schema does not exist";
+        }
+
+        
     }
                         
                     
