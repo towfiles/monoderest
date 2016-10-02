@@ -11,7 +11,6 @@ var db;
 /* rest get api crud*/
 router.get('/*', function(req, res, next) {
     db = req.db;
-    console.log(db);
     parameters = req.query;
     //validation
     if(!func.isObjEmptyOrNotExist(parameters)){
@@ -23,6 +22,7 @@ router.get('/*', function(req, res, next) {
             }
             else {
                 var processedQuery = func.queryProcessor(parameters);
+                console.log(processedQuery);
                 db.collection(processedQuery.collections)
                     .find(processedQuery.filter, processedQuery.column)
                     .toArray(function (e, docs) {
@@ -32,7 +32,6 @@ router.get('/*', function(req, res, next) {
 
             }
 
-
     }
     else{
         var err = func.functionHandler(1, "");
@@ -41,7 +40,6 @@ router.get('/*', function(req, res, next) {
     }
 
 });
-
 
 router.post("/*", function(req, res, next){
     db = req.db;
@@ -85,10 +83,6 @@ router.post("/*", function(req, res, next){
 
 
 });
-
-
-
-
 
 router.put("/*", function(req, res, next){
     db = req.db;
@@ -134,8 +128,6 @@ router.put("/*", function(req, res, next){
 
 
 });
-
-
 
 router.delete("/*", function(req, res, next){
     db = req.db;

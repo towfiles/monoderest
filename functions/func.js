@@ -3,10 +3,10 @@
  */
 
 var func = {
+
     functionHandler : function (errCode,field) {
         var msg = "";
         var status;
-        var err = {};
         switch(errCode) {
             case 1: 
                 msg = "Incorrect parameter syntax";
@@ -26,9 +26,10 @@ var func = {
                 break;
         }
 
-        err.msg    = msg;
-        err.status = status;
-        return err;
+        return {
+            msg    : msg,
+            status : status
+        };
     },
 
     isObjEmptyOrNotExist : function(obj) { //check if object exist
@@ -42,7 +43,6 @@ var func = {
     },
 
     queryValidator : function(query,req){
-        //validate all compusulsory queries
         if(this.isObjEmptyOrNotExist(query.collections)){
 
             return this.functionHandler(2, "collections");
@@ -69,20 +69,12 @@ var func = {
 
     queryProcessor : function(query){
 
-        var processedQuery = {};
-        processedQuery.collections = query.collections;
-        if(query.column == "*"){
-            processedQuery.column = {};
-        }
-        else {
-            processedQuery.column = query.column.split(",");
-        }
-        //filters are optional
-        if(!this.isObjEmptyOrNotExist(query.filter)){
-            processedQuery.filter = this.processFilter(query.filter);
-        }
+        return {
+                collections : query.collections,
+                column      : (query.column == "*")? {} :  query.column.split(","),
+                filter      : (!this.isObjEmptyOrNotExist(query.filter)) ? this.processFilter(query.filter) : {}
+        };
 
-        return processedQuery;
 
     },
 
@@ -113,7 +105,6 @@ var func = {
             }
 
         }
-        console.log(newfilter);
         newfilter = JSON.parse(newfilter);
         return newfilter;
     },
@@ -154,11 +145,6 @@ var func = {
 
         
     }
-                        
-                    
-
-
-
 
 
 };

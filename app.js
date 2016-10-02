@@ -49,19 +49,9 @@ app.use(function(req, res, next){
 
       }
     }
-
+    
     req.db = db;
-
-    if(err){
-      next(err);
-    }
-    else if(dbexist === false){
-      res.status(500).json({message: "database does not exist"});
-    }
-    else {
-      next();
-    }
-
+    (!err)? ((!dbexist)? res.status(500).json({message: "database does not exist"}) : next()) : next(err);
   });
 });
 
